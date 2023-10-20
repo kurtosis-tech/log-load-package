@@ -1,23 +1,15 @@
-# NOTE: If you're a VSCode user, you might like our VSCode extension: https://marketplace.visualstudio.com/items?itemName=Kurtosis.kurtosis-extension
+def run(plan, num_log_clients=1, logs_per_second=1):
+    cmd = "--logs-per-second={0}".format(logs_per_second)
+    config = ServiceConfig(
+        image ="quay.io/openshift-logging/cluster-logging-load-client",
+        cmd = [cmd],
+        env_vars = {
+            "ASSUME_NO_MOVING_GC_UNSAFE_RISK_IT_WITH":"go1.20",
+            }
+        )
 
-# Importing the Postgres package from the web using absolute import syntax
-# See also: https://docs.kurtosis.com/starlark-reference/import-module
-postgres = import_module("github.com/kurtosis-tech/postgres-package/main.star")
-
-# Importing a file inside this package using relative import syntax
-# See also: https://docs.kurtosis.com/starlark-reference/import-module
-lib = import_module("./lib/lib.star")
-
-# For more information on...
-#  - the 'run' function:  https://docs.kurtosis.com/concepts-reference/packages#runnable-packages
-#  - the 'plan' object:   https://docs.kurtosis.com/starlark-reference/plan
-#  - arguments:           https://docs.kurtosis.com/run#arguments
-def run(plan, name = "John Snow"):
-    plan.print("Hello, " + name)
-
-    # https://docs.kurtosis.com/starlark-reference/plan#upload_files
-    config_json = plan.upload_files("./static-files/config.json")
-
-    lib.run_hello(plan, config_json)
-
-    postgres.run(plan)
+    for num in range(0, num_log_clients):
+        plan.add_service(
+            name = "log-load-client-{0}".format(num),
+            config = config,
+        )

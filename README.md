@@ -1,6 +1,6 @@
-My Package
+Log Load Package
 ============
-This is a [Kurtosis](https://github.com/kurtosis-tech/kurtosis/) package. It doesn't do much now, but it will soon!
+This is a [Kurtosis](https://github.com/kurtosis-tech/kurtosis/) package that generates services that generate many logs. 
 
 Run this package
 ----------------
