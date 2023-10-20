@@ -1,4 +1,10 @@
 def run(plan, num_log_clients=1, logs_per_second=1):
+    """Runs services that generate logs at configurable speeds.
+
+    Args:
+        num_log_clients(int): The number of log load clients to spin up.
+        logs_per_second(int): Rate at which clients generate logs.
+    """
     cmd = "--logs-per-second={0}".format(logs_per_second)
     config = ServiceConfig(
         image ="quay.io/openshift-logging/cluster-logging-load-client",
